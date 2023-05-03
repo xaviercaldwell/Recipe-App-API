@@ -1,17 +1,17 @@
 """
-Serializers for the user API View.
+Serializers for the user api view.
 """
 from django.contrib.auth import (
     get_user_model,
     authenticate,
     )
-
 from django.utils.translation import gettext as _
+
 from rest_framework import serializers
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """Serializer for the user object."""
+    """serializer for the user object."""
 
     class Meta:
         model = get_user_model()
@@ -23,7 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
         return get_user_model().objects.create_user(**validated_data)
 
     def update(self, instance, validated_data):
-        """Update and return user."""
+        """update and return user."""
         password = validated_data.pop('password', None)
         user = super().update(instance, validated_data)
 
@@ -50,9 +50,9 @@ class AuthTokenSerializer(serializers.Serializer):
             request=self.context.get('request'),
             username=email,
             password=password,
-        )
+        ),
         if not user:
-            msg = _('Unable to authenticate with provided credentials.')
+            msg = _('Unable to authenticate with provided credentials')
             raise serializers.ValidationError(msg, code='authorization')
 
         attrs['user'] = user
