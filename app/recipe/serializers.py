@@ -17,6 +17,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 class RecipeSerializer(serializers.ModelSerializer):
     """Serializer for recipes."""
+    tags = TagSerializer(many=True, required=False)
 
     class Meta:
         model = Recipe
@@ -26,7 +27,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """create a recipe"""
         tags = validated_data.pop('tags', [])
-        recipe = Recipe.obects.create(**validated_data)
+        recipe = Recipe.objects.create(**validated_data)
         auth_user = self.context['request'].user
         for tag in tags:
             tag_obj, created = Tag.objects.get_or_create(
