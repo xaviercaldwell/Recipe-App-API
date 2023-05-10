@@ -62,10 +62,7 @@ class PrivateRecipeApiTests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = create_user(email='user@example.com', password='test123')
-        self.user = get_user_model().objects.create_user(
-            'user#example.com',
-            'testpass123',
-        )
+
         self.client.force_authenticate(self.user)
 
     def test_retrieve_recipes(self):
@@ -215,7 +212,7 @@ class PrivateRecipeApiTests(TestCase):
         recipe = recipes[0]
         self.assertEqual(recipe.tags.count(), 2)
         for tag in payload['tags']:
-            exists = recipes.tags.filter(
+            exists = recipe.tags.filter(
                 name=tag['name'],
                 user=self.user,
             ).exists()
